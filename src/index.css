@@ -1,16 +1,5 @@
 @import 'tailwindcss';
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  background-color: rgb(10, 10, 10);
-  color: #fff;
-}
-
 @theme {
   --default-font-family: 'Open Sans', serif;
   --color-gray-100: #1f2523;
