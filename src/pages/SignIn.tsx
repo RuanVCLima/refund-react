@@ -1,3 +1,11 @@
+import { Input } from '../componentes/Input'
+
 export function SignIn() {
-  return <h1>SignIn</h1>
+  return (
+    <form action="" className="w-full flex flex-col gap-4">
+      <Input required legend="E-mail" placeholder="seu@email.com" />
+
+      <Input required legend="Senha" type="password" placeholder="123456" />
+    </form>
+  )
 }
