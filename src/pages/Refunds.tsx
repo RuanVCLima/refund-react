@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { Input } from '../componentes/Input'
 import { Select } from '../componentes/Select'
 import { CATEGORIES, CATEGORIES_KEYS } from '../utils/categories'
+import { Upload } from '../componentes/Upload'
 
 export function Refund() {
   const [category, setCategory] = useState('')
@@ -16,18 +17,24 @@ export function Refund() {
       </header>
       <Input required legend="Name of solicitation" />
 
-      <Select
-        required
-        legend="Category"
-        value={category}
-        onChange={(e) => setCategory(e.target.value)}
-      >
-        {CATEGORIES_KEYS.map((category) => (
-          <option key={category} value={category}>
-            {CATEGORIES[category].name}
-          </option>
-        ))}
-      </Select>
+      <div className="flex gap-4">
+        <Select
+          required
+          legend="Category"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+        >
+          {CATEGORIES_KEYS.map((category) => (
+            <option key={category} value={category}>
+              {CATEGORIES[category].name}
+            </option>
+          ))}
+        </Select>
+
+        <Input legend="Value" required />
+      </div>
+
+      <Upload filename="ruan.png" />
     </form>
   )
 }
