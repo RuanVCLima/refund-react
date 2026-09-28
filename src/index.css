@@ -20,4 +20,5 @@ select {
   background-repeat: no-repeat;
   background-position: right 0.7rem top 50%;
   background-size: 1.25rem auto;
+  background-color: rgb(10, 10, 10);
 }

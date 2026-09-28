@@ -1,4 +1,4 @@
-type Props = React.ComponentProps<'input'> & {
+type Props = React.ComponentProps<'select'> & {
   legend?: string
 }
 
