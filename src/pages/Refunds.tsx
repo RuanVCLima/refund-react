@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router'
 
 import { Input } from '../componentes/Input'
 import { Select } from '../componentes/Select'
@@ -12,10 +13,14 @@ export function Refund() {
   const [category, setCategory] = useState('')
   const [filename, setFileName] = useState<File | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+
+  const navigate = useNavigate()
+
   function onSubmit(e: React.SubmitEvent) {
     e.preventDefault()
 
     console.log(name, amount, category, filename)
+    navigate('/confirm', { state: { fromSubmit: true } })
   }
   return (
     <form
@@ -23,14 +28,14 @@ export function Refund() {
       onSubmit={onSubmit}
     >
       <header>
-        <h1 className="text-xl font-bold">Refund solicitation</h1>
+        <h1 className="text-xl font-bold">Refund request</h1>
         <p className="text-sm text-gray-200 mt-2 mb-4">
           Expense information for reimbursement
         </p>
       </header>
       <Input
         required
-        legend="Name of solicitation"
+        legend="Name of request"
         value={name}
         onChange={(e) => setName(e.target.value)}
       />
