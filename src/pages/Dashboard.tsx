@@ -4,12 +4,13 @@ import { useState } from 'react'
 import searchSvg from '../assets/search.svg'
 import { RefundItem } from '../componentes/RefundItem'
 import { CATEGORIES } from '../utils/categories'
+import { formatCurrency } from '../utils/formatCurrency'
 
 const REFUND_EXAMPLE = {
   id: '123',
   name: 'Ruan',
   category: 'meals',
-  amount: '34.50',
+  amount: formatCurrency(34.5),
   categoryImg: CATEGORIES['food'].icon,
 }
 
@@ -37,7 +38,7 @@ export function Dashboard() {
         </Button>
       </form>
 
-      <div>
+      <div className="mt-6 flex flex-col gap-4 max-h-[342px] overflow-y-scroll">
         <RefundItem data={REFUND_EXAMPLE} />
       </div>
     </div>
