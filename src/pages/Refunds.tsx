@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
 
 import { Input } from '../componentes/Input'
 import { Select } from '../componentes/Select'
@@ -8,16 +8,21 @@ import { Upload } from '../componentes/Upload'
 import { Button } from '../componentes/Button'
 
 export function Refund() {
-  const [name, setName] = useState('')
-  const [amount, setAmount] = useState('')
-  const [category, setCategory] = useState('')
+  const [name, setName] = useState('Teste')
+  const [amount, setAmount] = useState('34')
+  const [category, setCategory] = useState('transport')
   const [filename, setFileName] = useState<File | null>(null)
   const [isLoading, setIsLoading] = useState(false)
 
   const navigate = useNavigate()
+  const params = useParams<{ id: string }>()
 
   function onSubmit(e: React.SubmitEvent) {
     e.preventDefault()
+
+    if (params.id) {
+      return navigate(-1)
+    }
 
     console.log(name, amount, category, filename)
     navigate('/confirm', { state: { fromSubmit: true } })
@@ -38,6 +43,7 @@ export function Refund() {
         legend="Name of request"
         value={name}
         onChange={(e) => setName(e.target.value)}
+        disabled={!!params.id}
       />
 
       <div className="flex gap-4">
@@ -46,6 +52,7 @@ export function Refund() {
           legend="Category"
           value={category}
           onChange={(e) => setCategory(e.target.value)}
+          disabled={!!params.id}
         >
           {CATEGORIES_KEYS.map((category) => (
             <option key={category} value={category}>
@@ -59,6 +66,7 @@ export function Refund() {
           required
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
+          disabled={!!params.id}
         />
       </div>
 
@@ -68,7 +76,7 @@ export function Refund() {
       />
 
       <Button type="submit" isLoading={isLoading}>
-        Send
+        {params.id ? 'Voltar' : 'Enviar'}
       </Button>
     </form>
   )
