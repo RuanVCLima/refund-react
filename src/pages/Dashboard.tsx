@@ -5,6 +5,7 @@ import searchSvg from '../assets/search.svg'
 import { RefundItem } from '../componentes/RefundItem'
 import { CATEGORIES } from '../utils/categories'
 import { formatCurrency } from '../utils/formatCurrency'
+import { Pagination } from '../componentes/Pagination'
 
 const REFUND_EXAMPLE = {
   id: '123',
@@ -16,9 +17,26 @@ const REFUND_EXAMPLE = {
 
 export function Dashboard() {
   const [name, setName] = useState('')
+  const [page, setPage] = useState(1)
+  const [totalOfPage, setTotalOfPage] = useState(10)
+
   function fetchRefunds(e: React.SubmitEvent) {
     e.preventDefault()
     console.log(name)
+  }
+
+  function handlePagination(action: 'next' | 'previous') {
+    setPage((prevPage) => {
+      if (action === 'next' && prevPage < totalOfPage) {
+        return prevPage + 1
+      }
+
+      if (action === 'previous' && prevPage > 1) {
+        return prevPage - 1
+      }
+
+      return prevPage
+    })
   }
   return (
     <div className="bg-neutral-950 rounded-xl p-10 md:min-w-[768px]">
@@ -41,6 +59,13 @@ export function Dashboard() {
       <div className="mt-6 flex flex-col gap-4 max-h-[342px] overflow-y-scroll">
         <RefundItem data={REFUND_EXAMPLE} />
       </div>
+
+      <Pagination
+        current={page}
+        total={totalOfPage}
+        onNext={() => handlePagination('next')}
+        onPrevious={() => handlePagination('previous')}
+      />
     </div>
   )
 }
