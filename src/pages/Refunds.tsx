@@ -7,11 +7,20 @@ import { Select } from '../componentes/Select'
 import { CATEGORIES, CATEGORIES_KEYS } from '../utils/categories'
 import { Upload } from '../componentes/Upload'
 import { Button } from '../componentes/Button'
+import { z, ZodError } from 'zod'
+
+const refundSchema = z.object({
+  name: z.string().min(3, { message: 'Inform a clear name for your request' }),
+  category: z.string().min(1, { message: 'Category is required' }),
+  amount: z.coerce
+    .number({ message: 'Inform a valid value' })
+    .positive({ message: 'The value must be greater than 0' }),
+})
 
 export function Refund() {
-  const [name, setName] = useState('Teste')
-  const [amount, setAmount] = useState('34')
-  const [category, setCategory] = useState('transport')
+  const [name, setName] = useState('')
+  const [amount, setAmount] = useState('')
+  const [category, setCategory] = useState('')
   const [filename, setFileName] = useState<File | null>(null)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -25,8 +34,24 @@ export function Refund() {
       return navigate(-1)
     }
 
-    console.log(name, amount, category, filename)
-    navigate('/confirm', { state: { fromSubmit: true } })
+    try {
+      setIsLoading(true)
+
+      const data = refundSchema.parse({
+        name,
+        amount: amount.replace(',', '.'),
+        category,
+      })
+      console.log(data)
+      navigate('/confirm', { state: { fromSubmit: true } })
+    } catch (error) {
+      console.log(error)
+      if (error instanceof ZodError) {
+        return alert(error.issues[0].message)
+      }
+    } finally {
+      setIsLoading(false)
+    }
   }
   return (
     <form
