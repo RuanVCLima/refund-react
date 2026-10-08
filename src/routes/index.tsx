@@ -7,15 +7,9 @@ import { useAuth } from '../hooks/useAuth'
 
 const isLoading = false
 
-const session = {
-  user: {
-    role: '',
-  },
-}
-
 function Route() {
-  const context = useAuth()
-  console.log(context)
+  const { session } = useAuth()
+
   switch (session?.user.role) {
     case 'employee':
       return <EmployeeRoutes />
