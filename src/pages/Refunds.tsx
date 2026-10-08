@@ -8,6 +8,8 @@ import { CATEGORIES, CATEGORIES_KEYS } from '../utils/categories'
 import { Upload } from '../componentes/Upload'
 import { Button } from '../componentes/Button'
 import { z, ZodError } from 'zod'
+import { api } from '../services/api'
+import { AxiosError } from 'axios'
 
 const refundSchema = z.object({
   name: z.string().min(3, { message: 'Inform a clear name for your request' }),
@@ -27,7 +29,7 @@ export function Refund() {
   const navigate = useNavigate()
   const params = useParams<{ id: string }>()
 
-  function onSubmit(e: React.SubmitEvent) {
+  async function onSubmit(e: React.SubmitEvent) {
     e.preventDefault()
 
     if (params.id) {
@@ -42,6 +44,8 @@ export function Refund() {
         amount: amount.replace(',', '.'),
         category,
       })
+
+      await api.post('/refunds', { ...data, fileName: '123456789123456789123' })
       console.log(data)
       navigate('/confirm', { state: { fromSubmit: true } })
     } catch (error) {
@@ -49,6 +53,11 @@ export function Refund() {
       if (error instanceof ZodError) {
         return alert(error.issues[0].message)
       }
+
+      if (error instanceof AxiosError) {
+        return alert(error.response?.data.message)
+      }
+      alert('It was not possible to do a request')
     } finally {
       setIsLoading(false)
     }
