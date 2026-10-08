@@ -5,11 +5,8 @@ import { ManagerRoutes } from './ManagerRoutes'
 import { Loading } from '../componentes/Loading'
 import { useAuth } from '../hooks/useAuth'
 
-const isLoading = false
-
 function Route() {
   const { session } = useAuth()
-
   switch (session?.user.role) {
     case 'employee':
       return <EmployeeRoutes />
@@ -21,6 +18,7 @@ function Route() {
 }
 
 export function Routes() {
+  const { isLoading } = useAuth()
   if (isLoading) {
     return <Loading />
   }
