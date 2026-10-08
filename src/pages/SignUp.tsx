@@ -2,6 +2,9 @@ import { Input } from '../componentes/Input'
 import { Button } from '../componentes/Button'
 import { useState } from 'react'
 import { z, ZodError } from 'zod'
+import { api } from '../services/api'
+import { useNavigate } from 'react-router'
+import { AxiosError } from 'axios'
 
 const signUpSchema = z
   .object({
@@ -23,7 +26,8 @@ export function SignUp() {
   const [password, setPassword] = useState('')
   const [passwordConfirm, setPasswordConfirm] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  function onSubmit(e: React.SubmitEvent) {
+  const navigate = useNavigate()
+  async function onSubmit(e: React.SubmitEvent) {
     e.preventDefault()
     try {
       setIsLoading(true)
@@ -34,9 +38,19 @@ export function SignUp() {
         password,
         passwordConfirm,
       })
+
+      await api.post('/users', data)
+
+      if (confirm('User registered successfully. Go to the login page?')) {
+        navigate('/')
+      }
     } catch (error) {
+      console.log(error)
       if (error instanceof ZodError) {
         return alert(error.issues[0].message)
+      }
+      if (error instanceof AxiosError) {
+        return alert(error.response?.data.message)
       }
 
       alert('It was not possible to register')
