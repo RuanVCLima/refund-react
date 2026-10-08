@@ -14,8 +14,8 @@ const session = {
 }
 
 function Route() {
-  const { name } = useAuth()
-  console.log(name)
+  const context = useAuth()
+  console.log(context)
   switch (session?.user.role) {
     case 'employee':
       return <EmployeeRoutes />
