@@ -18,31 +18,9 @@ export function Dashboard() {
   const [totalOfPage, setTotalOfPage] = useState(0)
   const [refunds, setRefunds] = useState<RefundItemProps[]>([])
 
-  async function fetchRefunds() {
-    try {
-      const response = await api.get<RefundsPaginationAPIResponse>(
-        `/refunds?name=${name.trim()}&page=${page}&perPage=${PER_PAGE}`,
-      )
-      setRefunds(
-        response.data.refunds.map((refund) => ({
-          id: refund.id,
-          name: refund.user.name,
-          description: refund.name,
-          amount: formatCurrency(refund.amount),
-          categoryImg: CATEGORIES[refund.category].icon,
-        })),
-      )
-
-      setTotalOfPage(response.data.pagination.totalPages)
-    } catch (error) {
-      console.log(error)
-      if (error instanceof AxiosError) {
-        return alert(error.response?.data.message)
-      }
-      alert('It was not possible to load')
-    }
+  function onSubmit(e: React.SubmitEvent) {
+    e.preventDefault()
   }
-
   function handlePagination(action: 'next' | 'previous') {
     setPage((prevPage) => {
       if (action === 'next' && prevPage < totalOfPage) {
@@ -57,14 +35,39 @@ export function Dashboard() {
     })
   }
   useEffect(() => {
-    fetchRefunds()
+    async function loadRefunds() {
+      try {
+        const response = await api.get<RefundsPaginationAPIResponse>(
+          `/refunds?name=${name.trim()}&page=${page}&perPage=${PER_PAGE}`,
+        )
+        setRefunds(
+          response.data.refunds.map((refund) => ({
+            id: refund.id,
+            name: refund.user.name,
+            description: refund.name,
+            amount: formatCurrency(refund.amount),
+            categoryImg: CATEGORIES[refund.category].icon,
+          })),
+        )
+
+        setTotalOfPage(response.data.pagination.totalPages)
+      } catch (error) {
+        console.log(error)
+        if (error instanceof AxiosError) {
+          return alert(error.response?.data.message)
+        }
+        alert('It was not possible to load')
+      }
+    }
+
+    loadRefunds()
   }, [])
   return (
     <div className="bg-neutral-950 rounded-xl p-10 md:min-w-[768px]">
       <h1 className="text-gray-500 font-bold text-xl flex-1">Requests</h1>
 
       <form
-        onSubmit={fetchRefunds}
+        onSubmit={onSubmit}
         className="flex flex-1 items-center justify-between pb-6 border-b-[1px] border-b-neutral-700 md:flex-row gap-2 mt-6 "
       >
         <Input
