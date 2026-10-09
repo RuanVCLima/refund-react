@@ -14,7 +14,6 @@ Adicione capturas de tela reais da aplicação na pasta `docs/screenshots/` e at
 |---|---|---|
 | ![Tela de login](demonstration/login-page.png) | ![Dashboard](demonstration/dashboard.png) | ![Formulário de reembolso](demonstration/request-page.png) |
 
-> As imagens acima são referências de caminho, não imagens incluídas nos arquivos recebidos. Até que as capturas sejam adicionadas, elas não serão exibidas no GitHub.
 
 ## Funcionalidades
 
