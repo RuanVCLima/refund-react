@@ -4,7 +4,7 @@ type RefundAPIResponse = {
   name: string
   category: CategoriesAPIEnum
   amount: number
-  filename: string
+  fileName: string
   user: {
     name: string
   }

@@ -15,11 +15,38 @@ const PER_PAGE = 5
 export function Dashboard() {
   const [name, setName] = useState('')
   const [page, setPage] = useState(1)
+  const [searchName, setSearchName] = useState('')
   const [totalOfPage, setTotalOfPage] = useState(0)
   const [refunds, setRefunds] = useState<RefundItemProps[]>([])
 
+  async function fetchRefunds() {
+    try {
+      const response = await api.get<RefundsPaginationAPIResponse>(
+        `/refunds?name=${name.trim()}&page=${page}&perPage=${PER_PAGE}`,
+      )
+      setRefunds(
+        response.data.refunds.map((refund) => ({
+          id: refund.id,
+          name: refund.user.name,
+          description: refund.name,
+          amount: formatCurrency(refund.amount),
+          categoryImg: CATEGORIES[refund.category].icon,
+        })),
+      )
+
+      setTotalOfPage(response.data.pagination.totalPages)
+    } catch (error) {
+      console.log(error)
+      if (error instanceof AxiosError) {
+        return alert(error.response?.data.message)
+      }
+      alert('It was not possible to load')
+    }
+  }
   function onSubmit(e: React.SubmitEvent) {
     e.preventDefault()
+    setPage(1)
+    setSearchName(name)
   }
   function handlePagination(action: 'next' | 'previous') {
     setPage((prevPage) => {
@@ -35,33 +62,8 @@ export function Dashboard() {
     })
   }
   useEffect(() => {
-    async function loadRefunds() {
-      try {
-        const response = await api.get<RefundsPaginationAPIResponse>(
-          `/refunds?name=${name.trim()}&page=${page}&perPage=${PER_PAGE}`,
-        )
-        setRefunds(
-          response.data.refunds.map((refund) => ({
-            id: refund.id,
-            name: refund.user.name,
-            description: refund.name,
-            amount: formatCurrency(refund.amount),
-            categoryImg: CATEGORIES[refund.category].icon,
-          })),
-        )
-
-        setTotalOfPage(response.data.pagination.totalPages)
-      } catch (error) {
-        console.log(error)
-        if (error instanceof AxiosError) {
-          return alert(error.response?.data.message)
-        }
-        alert('It was not possible to load')
-      }
-    }
-
-    loadRefunds()
-  }, [])
+    fetchRefunds()
+  }, [searchName, page])
   return (
     <div className="bg-neutral-950 rounded-xl p-10 md:min-w-[768px]">
       <h1 className="text-gray-500 font-bold text-xl flex-1">Requests</h1>
@@ -73,6 +75,7 @@ export function Dashboard() {
         <Input
           placeholder="Search for the name"
           onChange={(e) => setName(e.target.value)}
+          value={name}
         />
 
         <Button type="submit" variant="icon">
