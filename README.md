@@ -147,7 +147,6 @@ npm run dev
 
 O script `dev` informado no `package.json` executa `tsx watch src/server.ts`. O `package.json` enviado não define scripts de migração; caso precise criar/aplicar migrações, confira a configuração da versão do Prisma instalada e o fluxo utilizado no projeto.
 
-> O endereço/porta da API não foi confirmado nos arquivos de configuração visíveis. Consulte `src/server.ts` e a configuração de ambiente para saber a URL local exata.
 
 ### 2. Frontend
 
