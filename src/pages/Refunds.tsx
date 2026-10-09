@@ -79,7 +79,6 @@ export function Refund() {
       setName(data.name)
       setCategory(data.category)
       setAmount(formatCurrency(data.amount))
-      console.log(data)
       setFileURL(data.fileName)
     } catch (error) {
       console.log(error)
