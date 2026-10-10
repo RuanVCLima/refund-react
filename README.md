@@ -2,7 +2,6 @@
 
 Aplicação web para registrar e consultar solicitações de reembolso, com autenticação de usuários e separação de permissões por perfil. O projeto é composto por uma interface React e uma API REST desenvolvida com Node.js e Express.
 
-> **Status:** projeto em desenvolvimento. As funcionalidades e os comandos abaixo foram documentados com base nos arquivos enviados; revise os pontos marcados antes de publicar o repositório.
 
 ## Demonstração
 
